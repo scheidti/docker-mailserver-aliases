@@ -33,7 +33,7 @@ definitions:
 host: localhost:8080
 info:
   contact:
-    email: christian@scheid.tech
+    email: admin@scheid.tech
     name: Christian Scheid
     url: https://github.com/scheidti/docker-mailserver-aliases
   description: API for managing aliases in a Docker Mailserver container
@@ -90,6 +90,37 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Add a new email alias
+      tags:
+      - Aliases
+  /v1/aliases/{alias}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an email alias from the Docker Mailserver container
+      parameters:
+      - description: Alias to delete
+        in: path
+        name: alias
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete an email alias
       tags:
       - Aliases
   /v1/emails:

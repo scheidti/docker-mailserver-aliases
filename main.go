@@ -16,7 +16,7 @@ import (
 
 //	@contact.name	Christian Scheid
 //	@contact.url	https://github.com/scheidti/docker-mailserver-aliases
-//	@contact.email	christian@scheid.tech
+//	@contact.email	admin@scheid.tech
 
 //	@license.name	MIT
 //	@license.url	https://opensource.org/licenses/MIT
@@ -33,6 +33,7 @@ func main() {
 		api.GET("/emails", routes.EmailsGetHandler)
 		api.GET("/aliases", routes.AliasesGetHandler)
 		api.POST("/aliases", routes.AliasesPostHandler)
+		api.DELETE("/aliases/:alias", routes.AliasesDeleteHandler)
 	}
 
 	addr := os.Getenv("GIN_ADDR")

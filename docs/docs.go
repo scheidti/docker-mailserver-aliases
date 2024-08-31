@@ -12,7 +12,7 @@ const docTemplate = `{
         "contact": {
             "name": "Christian Scheid",
             "url": "https://github.com/scheidti/docker-mailserver-aliases",
-            "email": "christian@scheid.tech"
+            "email": "admin@scheid.tech"
         },
         "license": {
             "name": "MIT",
@@ -83,6 +83,53 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/aliases/{alias}": {
+            "delete": {
+                "description": "Deletes an email alias from the Docker Mailserver container",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Aliases"
+                ],
+                "summary": "Delete an email alias",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Alias to delete",
+                        "name": "alias",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorResponse"
                         }

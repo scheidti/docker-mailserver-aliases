@@ -63,13 +63,39 @@ func AliasesPostHandler(c *gin.Context) {
 	var newAlias models.AliasResponse
 
 	if err := c.ShouldBindJSON(&newAlias); err != nil {
-		c.JSON(400, models.ErrorResponse{Error: err.Error()})
+		c.JSON(400, models.ErrorResponse{Error: "Invalid request body"})
 		return
 	}
 
 	// TODO: Implement adding an alias
 
 	c.JSON(201, newAlias)
+}
+
+// AliasesDeleteHandler godoc
+//
+//	@Summary	Delete an email alias
+//	@Schemes
+//	@Description	Deletes an email alias from the Docker Mailserver container
+//	@Tags			Aliases
+//	@Accept			json
+//	@Produce		json
+//	@Success		204
+//	@Failure		500		{object}	models.ErrorResponse
+//	@Failure		400		{object}	models.ErrorResponse
+//	@Failure		404		{object}	models.ErrorResponse
+//	@Param			alias	path		string	true	"Alias to delete"
+//	@Router			/v1/aliases/{alias} [delete]
+func AliasesDeleteHandler(c *gin.Context) {
+	alias := c.Param("alias")
+	if alias == "" {
+		c.JSON(400, models.ErrorResponse{Error: "Alias must be provided"})
+		return
+	}
+
+	// TODO: Implement delete an alias
+
+	c.Status(204)
 }
 
 func getAliases(cli DockerClient, containerName string) (models.AliasListResponse, error) {
