@@ -30,6 +30,7 @@ func main() {
 	api := engine.Group("/v1")
 	{
 		api.GET("/status", routes.StatusGetHandler)
+		api.GET("/emails", routes.EmailsGetHandler)
 	}
 
 	addr := os.Getenv("GIN_ADDR")

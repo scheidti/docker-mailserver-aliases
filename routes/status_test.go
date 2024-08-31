@@ -26,6 +26,14 @@ func (m *MockDockerClient) ContainerList(ctx context.Context, options container.
 	return args.Get(0).([]types.Container), args.Error(1)
 }
 
+func (m *MockDockerClient) ContainerExecCreate(ctx context.Context, container string, config container.ExecOptions) (types.IDResponse, error) {
+	return types.IDResponse{}, nil
+}
+
+func (m *MockDockerClient) ContainerExecAttach(ctx context.Context, execID string, config container.ExecAttachOptions) (types.HijackedResponse, error) {
+	return types.HijackedResponse{}, nil
+}
+
 func (m *MockDockerClient) Close() error {
 	return nil
 }

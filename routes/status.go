@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"github.com/docker/docker/api/types"
@@ -13,6 +14,8 @@ import (
 
 type DockerClient interface {
 	ContainerList(ctx context.Context, options container.ListOptions) ([]types.Container, error)
+	ContainerExecCreate(ctx context.Context, container string, config container.ExecOptions) (types.IDResponse, error)
+	ContainerExecAttach(ctx context.Context, execID string, config container.ExecAttachOptions) (types.HijackedResponse, error)
 	Close() error
 }
 
@@ -28,7 +31,7 @@ type DockerClient interface {
 //	@Failure		500	{object}	models.ErrorResponse
 //	@Router			/v1/status [get]
 func StatusGetHandler(c *gin.Context) {
-	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
+	cli, err := getDockerClient()
 	if err != nil {
 		c.JSON(500, models.ErrorResponse{Error: err.Error()})
 		return
@@ -36,6 +39,15 @@ func StatusGetHandler(c *gin.Context) {
 	defer cli.Close()
 
 	checkIfContainerIsRunning(c, cli)
+}
+
+func getDockerClient() (DockerClient, error) {
+	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
+	if err != nil {
+		return nil, err
+	}
+
+	return cli, nil
 }
 
 func checkIfContainerIsRunning(c *gin.Context, cli DockerClient) {
@@ -55,4 +67,21 @@ func checkIfContainerIsRunning(c *gin.Context, cli DockerClient) {
 	}
 
 	c.JSON(200, models.StatusResponse{Running: false})
+}
+
+func getMailserverContainer(cli DockerClient) (types.Container, error) {
+	ctx := context.Background()
+
+	containers, err := cli.ContainerList(ctx, container.ListOptions{})
+	if err != nil {
+		return types.Container{}, err
+	}
+
+	for _, container := range containers {
+		if strings.Contains(container.Image, models.DockerImage) {
+			return container, nil
+		}
+	}
+
+	return types.Container{}, errors.New("mailserver container not found")
 }

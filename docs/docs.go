@@ -23,6 +23,35 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/emails": {
+            "get": {
+                "description": "Gets a list of all available email addresses from the Docker Mailserver container",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Utility"
+                ],
+                "summary": "List of all available email addresses",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.EmailListResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/status": {
             "get": {
                 "description": "Checks if the Docker Mailserver Docker container is running",
@@ -54,6 +83,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.EmailListResponse": {
+            "type": "object",
+            "properties": {
+                "emails": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "models.ErrorResponse": {
             "type": "object",
             "properties": {

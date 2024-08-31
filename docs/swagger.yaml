@@ -1,4 +1,11 @@
 definitions:
+  models.EmailListResponse:
+    properties:
+      emails:
+        items:
+          type: string
+        type: array
+    type: object
   models.ErrorResponse:
     properties:
       error:
@@ -22,6 +29,26 @@ info:
   title: Docker Mailserver Aliases API
   version: "1.0"
 paths:
+  /v1/emails:
+    get:
+      consumes:
+      - application/json
+      description: Gets a list of all available email addresses from the Docker Mailserver
+        container
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.EmailListResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: List of all available email addresses
+      tags:
+      - Utility
   /v1/status:
     get:
       consumes:
