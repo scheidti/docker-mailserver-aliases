@@ -1,0 +1,67 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for managing aliases in a Docker Mailserver container",
+        "title": "Docker Mailserver Aliases API",
+        "contact": {
+            "name": "Christian Scheid",
+            "url": "https://github.com/scheidti/docker-mailserver-aliases",
+            "email": "christian@scheid.tech"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/v1/status": {
+            "get": {
+                "description": "Checks if the Docker Mailserver Docker container is running",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Utility"
+                ],
+                "summary": "Checks Mailserver Docker container",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.StatusResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.StatusResponse": {
+            "type": "object",
+            "properties": {
+                "running": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

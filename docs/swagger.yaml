@@ -1,0 +1,44 @@
+definitions:
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.StatusResponse:
+    properties:
+      running:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: christian@scheid.tech
+    name: Christian Scheid
+    url: https://github.com/scheidti/docker-mailserver-aliases
+  description: API for managing aliases in a Docker Mailserver container
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Docker Mailserver Aliases API
+  version: "1.0"
+paths:
+  /v1/status:
+    get:
+      consumes:
+      - application/json
+      description: Checks if the Docker Mailserver Docker container is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.StatusResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Checks Mailserver Docker container
+      tags:
+      - Utility
+swagger: "2.0"
