@@ -46,6 +46,32 @@ func AliasesGetHandler(c *gin.Context) {
 	c.JSON(200, aliases)
 }
 
+// AliasesPostHandler godoc
+//
+//	@Summary	Add a new email alias
+//	@Schemes
+//	@Description	Adds a new email alias to the Docker Mailserver container
+//	@Tags			Aliases
+//	@Accept			json
+//	@Produce		json
+//	@Param			alias	body		models.AliasResponse	true	"Alias to add"
+//	@Success		201		{object}	models.AliasResponse
+//	@Failure		500		{object}	models.ErrorResponse
+//	@Failure		400		{object}	models.ErrorResponse
+//	@Router			/v1/aliases [post]
+func AliasesPostHandler(c *gin.Context) {
+	var newAlias models.AliasResponse
+
+	if err := c.ShouldBindJSON(&newAlias); err != nil {
+		c.JSON(400, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	// TODO: Implement adding an alias
+
+	c.JSON(201, newAlias)
+}
+
 func getAliases(cli DockerClient, containerName string) (models.AliasListResponse, error) {
 	ctx := context.Background()
 

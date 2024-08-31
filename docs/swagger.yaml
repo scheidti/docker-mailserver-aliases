@@ -63,6 +63,35 @@ paths:
       summary: List of all available email aliases
       tags:
       - Aliases
+    post:
+      consumes:
+      - application/json
+      description: Adds a new email alias to the Docker Mailserver container
+      parameters:
+      - description: Alias to add
+        in: body
+        name: alias
+        required: true
+        schema:
+          $ref: '#/definitions/models.AliasResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.AliasResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Add a new email alias
+      tags:
+      - Aliases
   /v1/emails:
     get:
       consumes:
