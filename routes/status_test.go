@@ -27,10 +27,18 @@ func (m *MockDockerClient) ContainerList(ctx context.Context, options container.
 }
 
 func (m *MockDockerClient) ContainerExecCreate(ctx context.Context, container string, config container.ExecOptions) (types.IDResponse, error) {
-	return types.IDResponse{}, nil
+	args := m.Called(ctx, container, config)
+	if args.Get(0) == nil {
+		return types.IDResponse{}, args.Error(1)
+	}
+	return args.Get(0).(types.IDResponse), args.Error(1)
 }
 
 func (m *MockDockerClient) ContainerExecAttach(ctx context.Context, execID string, config container.ExecAttachOptions) (types.HijackedResponse, error) {
+	args := m.Called(ctx, execID, config)
+	if args.Get(0) == nil {
+		return types.HijackedResponse{}, args.Error(1)
+	}
 	return types.HijackedResponse{}, nil
 }
 
@@ -113,5 +121,36 @@ func TestStatusGetHandler(t *testing.T) {
 
 		assert.Equal(t, http.StatusOK, w.Code)
 		assert.JSONEq(t, `{"running": true}`, w.Body.String())
+	})
+
+	t.Run("getMailserverContainer should return Mailserver container", func(t *testing.T) {
+		mockClient := new(MockDockerClient)
+		mockClient.On("ContainerList", mock.Anything, mock.Anything).Return([]types.Container{
+			{Image: "mailserver/docker-mailserver"},
+		}, nil)
+
+		container, err := getMailserverContainer(mockClient)
+		assert.Equal(t, "mailserver/docker-mailserver", container.Image)
+		assert.Nil(t, err)
+	})
+
+	t.Run("getMailserverContainer should return error if no Mailserver container is running", func(t *testing.T) {
+		mockClient := new(MockDockerClient)
+		mockClient.On("ContainerList", mock.Anything, mock.Anything).Return([]types.Container{
+			{Image: "test/some-other-image"},
+		}, nil)
+
+		container, err := getMailserverContainer(mockClient)
+		assert.Equal(t, types.Container{}, container)
+		assert.NotNil(t, err)
+	})
+
+	t.Run("getMailserverContainer should return error if Docker client returns an error", func(t *testing.T) {
+		mockClient := new(MockDockerClient)
+		mockClient.On("ContainerList", mock.Anything, mock.Anything).Return(nil, errors.New("docker error"))
+
+		container, err := getMailserverContainer(mockClient)
+		assert.Equal(t, types.Container{}, container)
+		assert.NotNil(t, err)
 	})
 }
