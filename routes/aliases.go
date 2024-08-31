@@ -82,8 +82,8 @@ func AliasesPostHandler(c *gin.Context) {
 	}
 
 	_, err = checkIfAliasExists(cli, container.ID, newAlias.Alias)
-	if err != nil {
-		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+	if err == nil {
+		c.JSON(500, models.ErrorResponse{Error: "Alias already exists"})
 		return
 	}
 
