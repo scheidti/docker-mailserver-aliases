@@ -60,7 +60,7 @@ func getEmails(cli DockerClient, containerName string) ([]string, error) {
 		return nil, err
 	}
 
-	resp, err := cli.ContainerExecAttach(context.Background(), execId.ID, container.ExecStartOptions{})
+	resp, err := cli.ContainerExecAttach(ctx, execId.ID, container.ExecStartOptions{})
 	if err != nil {
 		return nil, err
 	}

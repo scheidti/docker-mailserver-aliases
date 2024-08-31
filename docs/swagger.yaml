@@ -1,4 +1,18 @@
 definitions:
+  models.AliasListResponse:
+    properties:
+      aliases:
+        items:
+          $ref: '#/definitions/models.AliasResponse'
+        type: array
+    type: object
+  models.AliasResponse:
+    properties:
+      alias:
+        type: string
+      email:
+        type: string
+    type: object
   models.EmailListResponse:
     properties:
       emails:
@@ -29,6 +43,26 @@ info:
   title: Docker Mailserver Aliases API
   version: "1.0"
 paths:
+  /v1/aliases:
+    get:
+      consumes:
+      - application/json
+      description: Gets a list of all available email aliases from the Docker Mailserver
+        container
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AliasListResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: List of all available email aliases
+      tags:
+      - Aliases
   /v1/emails:
     get:
       consumes:

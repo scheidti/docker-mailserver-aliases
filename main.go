@@ -31,6 +31,7 @@ func main() {
 	{
 		api.GET("/status", routes.StatusGetHandler)
 		api.GET("/emails", routes.EmailsGetHandler)
+		api.GET("/aliases", routes.AliasesGetHandler)
 	}
 
 	addr := os.Getenv("GIN_ADDR")

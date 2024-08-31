@@ -23,6 +23,35 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/aliases": {
+            "get": {
+                "description": "Gets a list of all available email aliases from the Docker Mailserver container",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Aliases"
+                ],
+                "summary": "List of all available email aliases",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.AliasListResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/emails": {
             "get": {
                 "description": "Gets a list of all available email addresses from the Docker Mailserver container",
@@ -83,6 +112,28 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.AliasListResponse": {
+            "type": "object",
+            "properties": {
+                "aliases": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.AliasResponse"
+                    }
+                }
+            }
+        },
+        "models.AliasResponse": {
+            "type": "object",
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "models.EmailListResponse": {
             "type": "object",
             "properties": {
