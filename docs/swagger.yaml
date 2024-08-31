@@ -48,7 +48,7 @@ paths:
             $ref: '#/definitions/models.ErrorResponse'
       summary: List of all available email addresses
       tags:
-      - Utility
+      - E-Mails
   /v1/status:
     get:
       consumes:

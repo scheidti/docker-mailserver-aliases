@@ -33,7 +33,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Utility"
+                    "E-Mails"
                 ],
                 "summary": "List of all available email addresses",
                 "responses": {

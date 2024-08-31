@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net/mail"
+	"regexp"
 	"strings"
 
 	"github.com/docker/docker/api/types/container"
@@ -16,7 +18,7 @@ import (
 //	@Summary	List of all available email addresses
 //	@Schemes
 //	@Description	Gets a list of all available email addresses from the Docker Mailserver container
-//	@Tags			Utility
+//	@Tags			E-Mails
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	models.EmailListResponse
@@ -70,5 +72,24 @@ func getEmails(cli DockerClient, containerName string) ([]string, error) {
 		return nil, err
 	}
 
-	return strings.Split(outBuf.String(), "\n"), nil
+	return parseEmailCommandResult(outBuf.String()), nil
+}
+
+func parseEmailCommandResult(commandResult string) []string {
+	emailRegex := regexp.MustCompile(`\*\s*(.*?)\s*\(`)
+	lines := strings.Split(commandResult, "\n")
+	result := make([]string, 0)
+
+	for _, line := range lines {
+		matches := emailRegex.FindStringSubmatch(line)
+		if len(matches) > 0 {
+			_, err := mail.ParseAddress(matches[1])
+			if err != nil {
+				continue
+			}
+			result = append(result, matches[1])
+		}
+	}
+
+	return result
 }
