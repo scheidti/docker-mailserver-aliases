@@ -29,7 +29,7 @@ func main() {
 
 	api := engine.Group("/v1")
 	{
-		api.GET("/status", routes.StatusGET)
+		api.GET("/status", routes.StatusGetHandler)
 	}
 
 	addr := os.Getenv("GIN_ADDR")
