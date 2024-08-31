@@ -3,6 +3,7 @@ package routes
 import (
 	"bytes"
 	"context"
+	"errors"
 	"io"
 	"net/mail"
 	"regexp"
@@ -67,7 +68,47 @@ func AliasesPostHandler(c *gin.Context) {
 		return
 	}
 
-	// TODO: Implement adding an alias
+	cli, err := getDockerClient()
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+	defer cli.Close()
+
+	container, err := getMailserverContainer(cli)
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	_, err = checkIfAliasExists(cli, container.ID, newAlias.Alias)
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	emailExists, err := checkIfEmailExists(cli, container.ID, newAlias.Email)
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	if !emailExists {
+		c.JSON(400, models.ErrorResponse{Error: "Email does not exist"})
+		return
+	}
+
+	_, err = mail.ParseAddress(newAlias.Alias)
+	if err != nil {
+		c.JSON(400, models.ErrorResponse{Error: "Invalid alias"})
+		return
+	}
+
+	err = addAlias(cli, container.ID, newAlias)
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+		return
+	}
 
 	c.JSON(201, newAlias)
 }
@@ -93,9 +134,106 @@ func AliasesDeleteHandler(c *gin.Context) {
 		return
 	}
 
-	// TODO: Implement delete an alias
+	cli, err := getDockerClient()
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+	defer cli.Close()
+
+	container, err := getMailserverContainer(cli)
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	existingAlias, err := checkIfAliasExists(cli, container.ID, alias)
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	err = deleteAlias(cli, container.ID, existingAlias)
+	if err != nil {
+		c.JSON(500, models.ErrorResponse{Error: err.Error()})
+		return
+	}
 
 	c.Status(204)
+}
+
+func checkIfAliasExists(cli DockerClient, containerName string, alias string) (models.AliasResponse, error) {
+	aliases, err := getAliases(cli, containerName)
+	if err != nil {
+		return models.AliasResponse{}, err
+	}
+
+	for _, a := range aliases.Aliases {
+		if a.Alias == alias {
+			return a, nil
+		}
+	}
+
+	return models.AliasResponse{}, errors.New("alias not found")
+}
+
+func checkIfEmailExists(cli DockerClient, containerName string, email string) (bool, error) {
+	emails, err := getEmails(cli, containerName)
+	if err != nil {
+		return false, err
+	}
+
+	for _, e := range emails {
+		if e == email {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
+func deleteAlias(cli DockerClient, containerName string, alias models.AliasResponse) error {
+	ctx := context.Background()
+
+	execConfig := container.ExecOptions{
+		Cmd:          []string{"setup", "alias", "del", alias.Alias, alias.Email},
+		AttachStdout: true,
+		AttachStderr: true,
+	}
+
+	execId, err := cli.ContainerExecCreate(ctx, containerName, execConfig)
+	if err != nil {
+		return err
+	}
+
+	_, err = cli.ContainerExecAttach(ctx, execId.ID, container.ExecStartOptions{})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func addAlias(cli DockerClient, containerName string, alias models.AliasResponse) error {
+	ctx := context.Background()
+
+	execConfig := container.ExecOptions{
+		Cmd:          []string{"setup", "alias", "add", alias.Alias, alias.Email},
+		AttachStdout: true,
+		AttachStderr: true,
+	}
+
+	execId, err := cli.ContainerExecCreate(ctx, containerName, execConfig)
+	if err != nil {
+		return err
+	}
+
+	_, err = cli.ContainerExecAttach(ctx, execId.ID, container.ExecStartOptions{})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func getAliases(cli DockerClient, containerName string) (models.AliasListResponse, error) {
