@@ -39,7 +39,7 @@ func (m *MockDockerClient) ContainerExecAttach(ctx context.Context, execID strin
 	if args.Get(0) == nil {
 		return types.HijackedResponse{}, args.Error(1)
 	}
-	return types.HijackedResponse{}, nil
+	return args.Get(0).(types.HijackedResponse), args.Error(1)
 }
 
 func (m *MockDockerClient) Close() error {
