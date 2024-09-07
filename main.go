@@ -1,6 +1,8 @@
 package main
 
 import (
+	"embed"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +24,9 @@ import (
 //	@license.url	https://github.com/scheidti/docker-mailserver-aliases?tab=MIT-1-ov-file#readme
 
 //	@host	localhost:8080
+
+//go:embed frontend/dist/*
+var frontend embed.FS
 
 func main() {
 	engine := gin.Default()
@@ -45,5 +50,12 @@ func main() {
 		engine.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
+	engine.NoRoute(serveFrontend)
 	engine.Run(addr)
+}
+
+func serveFrontend(c *gin.Context) {
+	fileServer := http.StripPrefix("/", http.FileServer(http.FS(frontend)))
+	c.Request.URL.Path = "/frontend/dist" + c.Request.URL.Path
+	fileServer.ServeHTTP(c.Writer, c.Request)
 }
