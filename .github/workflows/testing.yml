@@ -27,6 +27,7 @@ jobs:
     - name: Test
       run: |
         mkdir -p ./frontend/dist
+        touch ./frontend/dist/index.html
         gotestsum --format pkgname --junitfile TestResults-${{ matrix.go-version }}.xml
 
     - name: Test Summary
