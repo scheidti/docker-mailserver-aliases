@@ -25,7 +25,9 @@ jobs:
       run: go install gotest.tools/gotestsum@latest
 
     - name: Test
-      run: gotestsum --format pkgname --junitfile TestResults-${{ matrix.go-version }}.xml
+      run: |
+        mkdir -p ./frontend/dist
+        gotestsum --format pkgname --junitfile TestResults-${{ matrix.go-version }}.xml
 
     - name: Test Summary
       uses: test-summary/action@v2
