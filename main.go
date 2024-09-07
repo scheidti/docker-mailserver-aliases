@@ -19,7 +19,7 @@ import (
 //	@contact.email	admin@scheid.tech
 
 //	@license.name	MIT
-//	@license.url	https://opensource.org/licenses/MIT
+//	@license.url	https://github.com/scheidti/docker-mailserver-aliases?tab=MIT-1-ov-file#readme
 
 //	@host	localhost:8080
 

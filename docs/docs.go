@@ -16,7 +16,7 @@ const docTemplate = `{
         },
         "license": {
             "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
+            "url": "https://github.com/scheidti/docker-mailserver-aliases?tab=MIT-1-ov-file#readme"
         },
         "version": "{{.Version}}"
     },

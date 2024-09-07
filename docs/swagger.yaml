@@ -39,7 +39,7 @@ info:
   description: API for managing aliases in a Docker Mailserver container
   license:
     name: MIT
-    url: https://opensource.org/licenses/MIT
+    url: https://github.com/scheidti/docker-mailserver-aliases?tab=MIT-1-ov-file#readme
   title: Docker Mailserver Aliases API
   version: "1.0"
 paths:
