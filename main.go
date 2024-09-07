@@ -41,6 +41,9 @@ func main() {
 		addr = ":8080"
 	}
 
-	engine.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	if gin.Mode() != gin.ReleaseMode {
+		engine.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
+
 	engine.Run(addr)
 }
