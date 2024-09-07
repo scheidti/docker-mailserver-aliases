@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, createEventDispatcher } from "svelte";
+	import { createEventDispatcher } from "svelte";
 	import { baseUrl } from "../config";
 	import type { AliasResponse } from "../types";
 
@@ -40,10 +40,6 @@
 
 		isDeleting = false;
 	}
-
-	onMount(() => {
-		dispatch("refresh");
-	});
 </script>
 
 <table>

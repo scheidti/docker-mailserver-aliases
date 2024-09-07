@@ -10,9 +10,9 @@
 		StatusResponse,
 	} from "./types";
 
-	const running = checkIfMailserverIsRunning();
 	const aliasesUrl = baseUrl + "/v1/aliases";
 	const statusUrl = baseUrl + "/v1/status";
+	const running = checkIfMailserverIsRunning();
 
 	let isLoading = false;
 	let aliases: AliasResponse[] = [];
@@ -21,6 +21,9 @@
 		try {
 			const response = await fetch(statusUrl);
 			const data: StatusResponse = await response.json();
+			if (data.running === true) {
+				getAliases();
+			}
 			return data.running === true;
 		} catch {
 			return false;
