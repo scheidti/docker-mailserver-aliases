@@ -64,9 +64,7 @@ func getEmails(cli DockerClient, containerName string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	if resp.Conn != nil {
-		defer resp.Close()
-	}
+	defer resp.Close()
 
 	var outBuf, _ bytes.Buffer
 	_, err = io.Copy(&outBuf, resp.Reader)

@@ -68,6 +68,12 @@ func AliasesPostHandler(c *gin.Context) {
 		return
 	}
 
+	_, err := mail.ParseAddress(newAlias.Alias)
+	if err != nil {
+		c.JSON(400, models.ErrorResponse{Error: "Invalid alias"})
+		return
+	}
+
 	cli, err := getDockerClient()
 	if err != nil {
 		c.JSON(500, models.ErrorResponse{Error: err.Error()})
@@ -95,12 +101,6 @@ func AliasesPostHandler(c *gin.Context) {
 
 	if !emailExists {
 		c.JSON(400, models.ErrorResponse{Error: "Email does not exist"})
-		return
-	}
-
-	_, err = mail.ParseAddress(newAlias.Alias)
-	if err != nil {
-		c.JSON(400, models.ErrorResponse{Error: "Invalid alias"})
 		return
 	}
 

@@ -24,10 +24,13 @@ func TestEmailsGetHandler(t *testing.T) {
 
 	t.Run("getEmails should return a list of email addresses", func(t *testing.T) {
 		mockClient := new(MockDockerClient)
+		mockHijackedResponseConn := new(MockHijackedResponseConn)
+		mockHijackedResponseConn.On("Close").Return(nil)
+
 		mockClient.On("ContainerExecCreate", mock.Anything, mock.Anything, mock.Anything).Return(types.IDResponse{ID: "execId"}, nil)
 		mockClient.On("ContainerExecAttach", mock.Anything, mock.Anything, mock.Anything).Return(types.HijackedResponse{
 			Reader: bufio.NewReader(io.NopCloser(bytes.NewBufferString("* name@developer.de ( 969K / ~ ) [0%] [ aliases -> postmaster@mail.de ]"))),
-			Conn:   nil,
+			Conn:   mockHijackedResponseConn,
 		}, nil)
 
 		emails, err := getEmails(mockClient, "containerId")
@@ -56,9 +59,12 @@ func TestEmailsGetHandler(t *testing.T) {
 
 	t.Run("getEmails should handle io.Copy error", func(t *testing.T) {
 		mockClient := new(MockDockerClient)
+		mockHijackedResponseConn := new(MockHijackedResponseConn)
+		mockHijackedResponseConn.On("Close").Return(nil)
 		mockClient.On("ContainerExecCreate", mock.Anything, mock.Anything, mock.Anything).Return(types.IDResponse{ID: "execId"}, nil)
 		mockClient.On("ContainerExecAttach", mock.Anything, mock.Anything, mock.Anything).Return(types.HijackedResponse{
 			Reader: bufio.NewReader(io.NopCloser(&errorReader{})),
+			Conn:   mockHijackedResponseConn,
 		}, nil)
 
 		emails, err := getEmails(mockClient, "containerId")
