@@ -2,22 +2,30 @@
 	import { onMount, createEventDispatcher } from "svelte";
 	import { baseUrl } from "../config";
 	import Spinner from "./Spinner.svelte";
-	import type { EmailsListResponse } from "../types";
+	import type { AliasResponse, EmailsListResponse } from "../types";
 
 	const aliasesUrl = baseUrl + "/v1/aliases";
 	const emailsUrl = baseUrl + "/v1/emails";
 	const dispatch = createEventDispatcher();
 
 	let alias = "";
+	let domain = "";
 	let email = "";
 	let emailOptions: string[] = [];
 	let inputElement: HTMLInputElement;
-	let validAlias = false;
 	let isLoading = false;
+	export let aliases: AliasResponse[] = [];
+
+	$: domainOptions = emailOptions.map((email) => email.split("@")[1]);
+	$: aliasAndDomain = alias + "@" + domain;
+	$: validAlias =
+		alias.length > 0 &&
+		domain.length > 0 &&
+		email.length > 0 &&
+		!checkIfAliasExistsAlready(aliasAndDomain) &&
+		(inputElement?.checkValidity() ?? false);
 
 	async function handleSubmit() {
-		checkValidAlias();
-
 		if (!validAlias) {
 			return;
 		}
@@ -36,7 +44,7 @@
 			if (response.status === 201) {
 				alias = "";
 				email = "";
-				inputElement.focus();
+				domain = "";
 				dispatch("added", { alias, email });
 			} else {
 				console.error(response);
@@ -49,11 +57,8 @@
 		// TODO: Show success or error message
 	}
 
-	function checkValidAlias() {
-		validAlias = inputElement.checkValidity();
-		if (!email) {
-			validAlias = false;
-		}
+	function checkIfAliasExistsAlready(alias: string) {
+		return aliases.some((a) => a.alias === alias);
 	}
 
 	async function getEmails() {
@@ -74,25 +79,45 @@
 <form on:submit|preventDefault={handleSubmit}>
 	<input
 		bind:this={inputElement}
-		bind:value={alias}
-		on:input={checkValidAlias}
+		bind:value={aliasAndDomain}
 		type="email"
-		id="alias"
-		name="alias"
+		id="aliasAndDomain"
+		name="aliasAndDomain"
+		class="hidden"
 		required
 	/>
 
-	<select bind:value={email} on:change={checkValidAlias}>
-		<option value="">Select e-mail...</option>
-		{#each emailOptions as option}
-			<option value={option}>{option}</option>
-		{/each}
-	</select>
+	<div>
+		<label for="alias" class="sr-only">Alias</label>
+		<input bind:value={alias} type="text" id="alias" name="alias" />
+	</div>
+
+	<div>
+		<label for="domain" class="sr-only">Domain</label>
+		<select id="domain" name="domain" bind:value={domain}>
+			<option value="">Select domain...</option>
+			{#each domainOptions as option}
+				<option value={option}>{option}</option>
+			{/each}
+		</select>
+	</div>
+
+	<div>
+		<label for="email" class="sr-only">Email</label>
+		<select id="email" name="email" bind:value={email}>
+			<option value="">Select e-mail...</option>
+			{#each emailOptions as option}
+				<option value={option}>{option}</option>
+			{/each}
+		</select>
+	</div>
 
 	{#if isLoading}
 		<Spinner />
 	{:else}
-		<button type="submit" disabled={validAlias !== true}> Add </button>
+		<div>
+			<button type="submit" disabled={validAlias !== true}> Add </button>
+		</div>
 	{/if}
 </form>
 

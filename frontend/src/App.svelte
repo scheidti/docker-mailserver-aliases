@@ -52,7 +52,7 @@
 		<Spinner />
 	{:then isRunning}
 		{#if isRunning}
-			<AddAlias on:added={getAliases} />
+			<AddAlias on:added={getAliases} {aliases} />
 			{#if isLoading}
 				<Spinner />
 			{:else}
