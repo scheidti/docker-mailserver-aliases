@@ -1,0 +1,441 @@
+{
+  "uuid": "39509bf6-1fac-4531-9b2f-6332944ee58f",
+  "lastMigration": 32,
+  "name": "Docker Mailserver Aliases API",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 8080,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "b2770deb-91f3-4808-ace8-84611a4d95aa",
+      "type": "http",
+      "documentation": "List of all available email aliases",
+      "method": "get",
+      "endpoint": "v1/aliases",
+      "responses": [
+        {
+          "uuid": "f2ad30a8-f749-4006-87d9-8fe529904714",
+          "body": "{\n  \"aliases\": [\n    {\n      \"alias\": \"test@site.de\",\n      \"email\": \"user@site.de\"\n    },\n    {\n      \"alias\": \"test2@site.de\",\n      \"email\": \"user@site.de\"\n    },\n    {\n      \"alias\": \"test3@site.de\",\n      \"email\": \"user@anothersite.de\"\n    }\n  ]\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "OK",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "ef84d705-2719-49fd-a77e-b17dc9478e86",
+          "body": "{\n  \"error\": \"\"\n}",
+          "latency": 0,
+          "statusCode": 500,
+          "label": "Internal Server Error",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "27ca39f7-4c7b-4c6c-bf2a-1adf71438a6d",
+      "type": "http",
+      "documentation": "Add a new email alias",
+      "method": "post",
+      "endpoint": "v1/aliases",
+      "responses": [
+        {
+          "uuid": "d8b92782-7797-462a-9c59-49a42f5b9a03",
+          "body": "{\n  \"alias\": \"newalias@alias.de\",\n  \"email\": \"user@site.de\"\n}",
+          "latency": 0,
+          "statusCode": 201,
+          "label": "Created",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "15f64484-f918-45fb-ac78-cb03421a16bd",
+          "body": "{\n  \"error\": \"\"\n}",
+          "latency": 0,
+          "statusCode": 400,
+          "label": "Bad Request",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "102e0ac5-4d19-477c-a707-bb1a55f701b2",
+          "body": "{\n  \"error\": \"\"\n}",
+          "latency": 0,
+          "statusCode": 500,
+          "label": "Internal Server Error",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "dcbdea94-d435-49b6-8902-9b3dfa980728",
+      "type": "http",
+      "documentation": "Delete an email alias",
+      "method": "delete",
+      "endpoint": "v1/aliases/:alias",
+      "responses": [
+        {
+          "uuid": "0be4a5f6-d1da-41ee-be97-51002d9cec8a",
+          "body": "",
+          "latency": 0,
+          "statusCode": 204,
+          "label": "No Content",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "417aca7f-19e8-4999-9b56-479e8a4a7c15",
+          "body": "{\n  \"error\": \"\"\n}",
+          "latency": 0,
+          "statusCode": 400,
+          "label": "Bad Request",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "8a203ce1-2509-40c6-aedc-b39d5a347ad4",
+          "body": "{\n  \"error\": \"\"\n}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Not Found",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "7c046f02-4b9b-4985-9c2d-7d99ae746103",
+          "body": "{\n  \"error\": \"\"\n}",
+          "latency": 0,
+          "statusCode": 500,
+          "label": "Internal Server Error",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "e7873c8a-8eea-4ed9-baee-73d32e6c750a",
+      "type": "http",
+      "documentation": "List of all available email addresses",
+      "method": "get",
+      "endpoint": "v1/emails",
+      "responses": [
+        {
+          "uuid": "29e6d3e1-bf8d-480d-bda9-2888c29debd9",
+          "body": "{\n  \"emails\": [\n    \"user@site.de\",\n    \"user@anothersite.de\"\n  ]\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "OK",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "77698705-07d2-43a3-a5ef-998c1e9a0074",
+          "body": "{\n  \"error\": \"\"\n}",
+          "latency": 0,
+          "statusCode": 500,
+          "label": "Internal Server Error",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "5b3d33db-b163-4f63-b564-77b4702c2b6b",
+      "type": "http",
+      "documentation": "Checks Mailserver Docker container",
+      "method": "get",
+      "endpoint": "v1/status",
+      "responses": [
+        {
+          "uuid": "8ed9753b-d9a9-47f8-b69c-9f8c33981a83",
+          "body": "{\n  \"running\": true\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "OK",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "df24ba04-f59f-4a3e-a22b-4634292872dd",
+          "body": "{\n  \"error\": \"\"\n}",
+          "latency": 0,
+          "statusCode": 500,
+          "label": "Internal Server Error",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "b2770deb-91f3-4808-ace8-84611a4d95aa"
+    },
+    {
+      "type": "route",
+      "uuid": "27ca39f7-4c7b-4c6c-bf2a-1adf71438a6d"
+    },
+    {
+      "type": "route",
+      "uuid": "dcbdea94-d435-49b6-8902-9b3dfa980728"
+    },
+    {
+      "type": "route",
+      "uuid": "e7873c8a-8eea-4ed9-baee-73d32e6c750a"
+    },
+    {
+      "type": "route",
+      "uuid": "5b3d33db-b163-4f63-b564-77b4702c2b6b"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    },
+    {
+      "key": "Accept",
+      "value": "application/json"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}

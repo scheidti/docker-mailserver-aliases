@@ -1,13 +1,14 @@
 {
-  "name": "frontend",
+  "name": "docker-mailserver-aliases-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json",
+    "mockoon": "mockoon-cli start --data ./mockoon-data.json"
   },
   "devDependencies": {
     "@mockoon/cli": "^8.4.0",
