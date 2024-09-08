@@ -65,7 +65,9 @@
 				<AliasList on:refresh={getAliases} {aliases} />
 			{/if}
 		{:else}
-			<Alert message={"Mailserver is not running."} type={"error"} />
+			<div class="mx-auto max-w-screen-xl">
+				<Alert message={"Mailserver is not running."} type={"error"} />
+			</div>
 		{/if}
 	{/await}
 </main>
