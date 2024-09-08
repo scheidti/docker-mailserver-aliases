@@ -76,49 +76,90 @@
 	});
 </script>
 
-<form on:submit|preventDefault={handleSubmit}>
-	<input
-		bind:this={inputElement}
-		bind:value={aliasAndDomain}
-		type="email"
-		id="aliasAndDomain"
-		name="aliasAndDomain"
-		class="hidden"
-		required
-	/>
+<div class="mx-auto flex justify-center items-center">
+	<form on:submit|preventDefault={handleSubmit}>
+		<input
+			bind:this={inputElement}
+			bind:value={aliasAndDomain}
+			type="email"
+			id="aliasAndDomain"
+			name="aliasAndDomain"
+			class="hidden"
+			required
+		/>
 
-	<div>
-		<label for="alias" class="sr-only">Alias</label>
-		<input bind:value={alias} type="text" id="alias" name="alias" />
-	</div>
-
-	<div>
-		<label for="domain" class="sr-only">Domain</label>
-		<select id="domain" name="domain" bind:value={domain}>
-			<option value="">Select domain...</option>
-			{#each domainOptions as option}
-				<option value={option}>{option}</option>
-			{/each}
-		</select>
-	</div>
-
-	<div>
-		<label for="email" class="sr-only">Email</label>
-		<select id="email" name="email" bind:value={email}>
-			<option value="">Select e-mail...</option>
-			{#each emailOptions as option}
-				<option value={option}>{option}</option>
-			{/each}
-		</select>
-	</div>
-
-	{#if isLoading}
-		<Spinner />
-	{:else}
-		<div>
-			<button type="submit" disabled={validAlias !== true}> Add </button>
+		<div class="add-row">
+			<p class="text-lg font-bold text-primary">Create new alias</p>
 		</div>
-	{/if}
-</form>
 
-<style></style>
+		<div class="add-row">
+			<div>
+				<label for="alias" class="sr-only">Alias</label>
+				<input
+					bind:value={alias}
+					type="text"
+					id="alias"
+					name="alias"
+					class="input input-bordered"
+					placeholder="New alias..."
+				/>
+			</div>
+
+			<div class="px-2 py-3">@</div>
+
+			<div>
+				<label for="domain" class="sr-only">Domain</label>
+				<select
+					id="domain"
+					name="domain"
+					class="select select-bordered"
+					bind:value={domain}
+				>
+					<option value="">Select domain...</option>
+					{#each domainOptions as option}
+						<option value={option}>{option}</option>
+					{/each}
+				</select>
+			</div>
+		</div>
+
+		<div class="add-row">
+			<p class="text-md text-primary">Redirects to</p>
+		</div>
+
+		<div class="add-row">
+			<label for="email" class="sr-only">Email</label>
+			<select
+				id="email"
+				name="email"
+				class="select select-bordered"
+				bind:value={email}
+			>
+				<option value="">Select email...</option>
+				{#each emailOptions as option}
+					<option value={option}>{option}</option>
+				{/each}
+			</select>
+		</div>
+
+		{#if isLoading}
+			<Spinner />
+		{:else}
+			<div class="add-row">
+				<button
+					type="submit"
+					class="btn btn-primary"
+					disabled={validAlias !== true}
+				>
+					Add
+				</button>
+			</div>
+		{/if}
+	</form>
+</div>
+
+<style>
+	.add-row {
+		@apply flex justify-center mb-4;
+	}
+</style>

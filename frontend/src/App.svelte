@@ -44,7 +44,11 @@
 </script>
 
 <header>
-	<h1>Docker Mailserver Aliases</h1>
+	<div class="mx-auto flex justify-center p-8">
+		<h1 class="font-sans text-secondary drop-shadow-lg text-2xl font-bold">
+			Docker Mailserver Aliases
+		</h1>
+	</div>
 </header>
 
 <main>
@@ -54,7 +58,9 @@
 		{#if isRunning}
 			<AddAlias on:added={getAliases} {aliases} />
 			{#if isLoading}
-				<Spinner />
+				<div class="flex justify-center">
+					<Spinner />
+				</div>
 			{:else}
 				<AliasList on:refresh={getAliases} {aliases} />
 			{/if}
@@ -65,14 +71,19 @@
 </main>
 
 <footer>
-	© 2024
-	<a
-		href="https://github.com/scheidti/docker-mailserver-aliases"
-		target="_blank"
-	>
-		Christian Scheid
-	</a>
-	- This project is licensed under the MIT license.
+	<div class="mx-auto flex justify-center p-8 mt-4">
+		<div class="text-sm">
+			© 2024
+			<a
+				href="https://github.com/scheidti/docker-mailserver-aliases"
+				target="_blank"
+				class="link"
+			>
+				Christian Scheid
+			</a>
+			- This project is licensed under the MIT license.
+		</div>
+	</div>
 </footer>
 
 <style>

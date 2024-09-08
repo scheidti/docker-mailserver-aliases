@@ -3,8 +3,8 @@
 	export let type: "error" | "success" | "info" | "warning" = "info";
 </script>
 
-<div role="alert" class={type}>
-	{message}
+<div role="alert" class={`alert alert-${type}`}>
+	<span>{message}</span>
 </div>
 
 <style></style>

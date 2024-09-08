@@ -42,27 +42,33 @@
 	}
 </script>
 
-<table>
-	<thead>
-		<tr>
-			<th scope="col">Alias</th>
-			<th scope="col">E-mail</th>
-			<th scope="col"></th>
-		</tr>
-	</thead>
-	<tbody>
-		{#each aliases as { alias, email }}
+<div class="overflow-x-auto mx-auto max-w-screen-xl">
+	<table class="table">
+		<thead>
 			<tr>
-				<td>{alias}</td>
-				<td>{email}</td>
-				<td>
-					<button disabled={isDeleting} on:click={() => removeAlias(alias)}>
-						Delete
-					</button>
-				</td>
+				<th scope="col">Alias</th>
+				<th scope="col">Email</th>
+				<th scope="col"></th>
 			</tr>
-		{/each}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{#each aliases as { alias, email }}
+				<tr class="hover">
+					<td>{alias}</td>
+					<td>{email}</td>
+					<td class="w-28">
+						<button
+							class="btn btn-sm btn-error"
+							disabled={isDeleting}
+							on:click={() => removeAlias(alias)}
+						>
+							Delete
+						</button>
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
 <style></style>
