@@ -70,7 +70,7 @@
 			<tr>
 				<th scope="col">Alias</th>
 				<th scope="col">Email</th>
-				<th scope="col"></th>
+				<th scope="col">Actions</th>
 			</tr>
 		</thead>
 		<tbody>
