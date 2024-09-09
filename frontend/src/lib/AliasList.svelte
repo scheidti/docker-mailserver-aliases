@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import { baseUrl } from "../config";
+	import { toasts } from "../stores";
 	import type { AliasResponse } from "../types";
 
 	const aliasesUrl = baseUrl + "/v1/aliases";
@@ -31,11 +32,24 @@
 
 			if (response.status === 204) {
 				dispatch("refresh");
+				toasts.update((toasts) => [
+					...toasts,
+					{ type: "success", text: "Alias deleted" },
+				]);
 			} else {
-				console.error(response);
+				toasts.update((toasts) => [
+					...toasts,
+					{
+						type: "error",
+						text: `Failed to delete alias: ${response.statusText}`,
+					},
+				]);
 			}
 		} catch (error) {
-			console.error(error);
+			toasts.update((toasts) => [
+				...toasts,
+				{ type: "error", text: `Failed to delete alias: ${error}` },
+			]);
 		}
 
 		isDeleting = false;

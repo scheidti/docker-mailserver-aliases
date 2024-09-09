@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from "svelte";
 	import { baseUrl } from "../config";
+	import { toasts } from "../stores";
 	import Spinner from "./Spinner.svelte";
 	import type { AliasResponse, EmailsListResponse } from "../types";
 
@@ -46,15 +47,24 @@
 				email = "";
 				domain = "";
 				dispatch("added", { alias, email });
+				toasts.update((toasts) => [
+					...toasts,
+					{ type: "success", text: "Alias added" },
+				]);
 			} else {
-				console.error(response);
+				toasts.update((toasts) => [
+					...toasts,
+					{ type: "error", text: `Failed to add alias: ${response.statusText}` },
+				]);
 			}
 		} catch (error) {
-			console.error(error);
+			toasts.update((toasts) => [
+				...toasts,
+				{ type: "error", text: `Failed to add alias: ${error}` },
+			]);
 		}
 
 		isLoading = false;
-		// TODO: Show success or error message
 	}
 
 	function checkIfAliasExistsAlready(alias: string) {

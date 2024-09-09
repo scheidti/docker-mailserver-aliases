@@ -18,3 +18,8 @@ export type ErrorResponse = {
 export type StatusResponse = {
 	running: boolean;
 };
+
+export type Toast = {
+	text: string;
+	type: "error" | "success" | "info" | "warning";
+};

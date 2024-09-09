@@ -9,6 +9,7 @@
 		AliasResponse,
 		StatusResponse,
 	} from "./types";
+	import Toast from "./lib/Toast.svelte";
 
 	const aliasesUrl = baseUrl + "/v1/aliases";
 	const statusUrl = baseUrl + "/v1/status";
@@ -70,6 +71,7 @@
 			</div>
 		{/if}
 	{/await}
+	<Toast />
 </main>
 
 <footer>
