@@ -1,10 +1,18 @@
+FROM node:20 AS frontend-builder
+
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install
+COPY frontend .
+RUN npm run build
+
 FROM golang:1.23.0-bookworm AS builder
 
 WORKDIR /app
 COPY go.mod go.sum ./
-RUN go mod download
 
 COPY . .
+COPY --from=frontend-builder /app/dist /app/frontend/dist
 RUN CGO_ENABLED=0 GOOS=linux go build
 
 FROM scratch
