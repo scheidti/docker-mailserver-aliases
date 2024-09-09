@@ -3,28 +3,35 @@
 	import { baseUrl } from "../config";
 	import { toasts } from "../stores";
 	import type { AliasResponse } from "../types";
+	import ConfirmModal from "./ConfirmModal.svelte";
 
 	const aliasesUrl = baseUrl + "/v1/aliases";
 	const dispatch = createEventDispatcher();
 
 	export let aliases: AliasResponse[] = [];
 	let isDeleting = false;
+	let showModal = false;
+	let aliasToDelete = "";
 
 	function isAliasInList(alias: string) {
 		return aliases.some((a) => a.alias === alias);
 	}
 
-	async function removeAlias(alias: string) {
-		if (!isAliasInList(alias)) {
+	function confirmDelete(alias: string) {
+		aliasToDelete = alias;
+		showModal = true;
+	}
+
+	async function removeAlias() {
+		if (!aliasToDelete || !isAliasInList(aliasToDelete)) {
 			return;
 		}
 
-		// TODO: Confirm dialog
 		isDeleting = true;
 
 		try {
 			const response = await fetch(
-				aliasesUrl + "/" + encodeURIComponent(alias),
+				aliasesUrl + "/" + encodeURIComponent(aliasToDelete),
 				{
 					method: "DELETE",
 				},
@@ -52,6 +59,7 @@
 			]);
 		}
 
+		aliasToDelete = "";
 		isDeleting = false;
 	}
 </script>
@@ -74,7 +82,7 @@
 						<button
 							class="btn btn-sm btn-error"
 							disabled={isDeleting}
-							on:click={() => removeAlias(alias)}
+							on:click={() => confirmDelete(alias)}
 						>
 							Delete
 						</button>
@@ -84,5 +92,11 @@
 		</tbody>
 	</table>
 </div>
+<ConfirmModal
+	bind:open={showModal}
+	title="Delete Alias"
+	description="Are you sure you want to delete this alias?"
+	on:confirm={removeAlias}
+/>
 
 <style></style>
