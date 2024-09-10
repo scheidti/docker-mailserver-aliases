@@ -39,7 +39,7 @@
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ alias, email }),
+				body: JSON.stringify({ alias: aliasAndDomain, email }),
 			});
 
 			if (response.status === 201) {
