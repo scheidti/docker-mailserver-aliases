@@ -42,7 +42,7 @@ Add the `mailserver-aliases` container to your `docker-compose.yaml` file:
 ```yaml
 services:
   mailserver-aliases:
-    image: chscheid/docker-mailserver-aliases:1.0.0
+    image: chscheid/docker-mailserver-aliases:1.0.1
     restart: unless-stopped
     environment:
       - GIN_ADDR=8080
@@ -74,7 +74,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
 
   mailserver-aliases:
-    image: chscheid/docker-mailserver-aliases:1.0.0
+    image: chscheid/docker-mailserver-aliases:1.0.1
     restart: unless-stopped
     environment:
       - GIN_ADDR=8080
