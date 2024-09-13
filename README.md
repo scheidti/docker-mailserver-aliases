@@ -32,7 +32,7 @@ To run the Docker container, you will need:
 You can change the port of the web server with the following environment variable:
 
 ```bash
-export GIN_ADDR=8080
+export GIN_ADDR=":8080"
 ```
 
 ### Docker Compose
