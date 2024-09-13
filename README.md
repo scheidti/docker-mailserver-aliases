@@ -44,8 +44,6 @@ services:
   mailserver-aliases:
     image: chscheid/docker-mailserver-aliases:1.0.1
     restart: unless-stopped
-    environment:
-      - GIN_ADDR=8080
     ports:
       - "8080:8080"
     volumes:
@@ -76,8 +74,6 @@ services:
   mailserver-aliases:
     image: chscheid/docker-mailserver-aliases:1.0.1
     restart: unless-stopped
-    environment:
-      - GIN_ADDR=8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 ```
