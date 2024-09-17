@@ -44,13 +44,29 @@ services:
   mailserver-aliases:
     image: chscheid/docker-mailserver-aliases:1.0.1
     restart: unless-stopped
+    read_only: true
     ports:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    cap_drop:
+      - ALL
 ```
 
 > **Note**: There is no built-in authentication for the frontend, so the web interface will be publicly available under port 8080. You may want to secure it with a reverse proxy and authentication.
+
+#### Why Mounting the Docker Socket is Required
+
+Mounting the Docker socket into the container is required for this project because the container needs to communicate with the Docker daemon to manage email aliases on the Docker Mailserver. The Docker Engine SDK is used to interact with the Docker daemon, allowing the REST API to list, add, and delete aliases.
+
+#### Security Considerations
+
+While mounting the Docker socket (`/var/run/docker.sock`) into a container grants the container elevated permissions to interact with the Docker daemon, it is a common practice for tools that need to manage Docker containers. Here are some considerations to ensure this setup remains secure:
+
+- **Restrict Access**: Protect the web interface by using a reverse proxy with authentication. This ensures that only authorized users can access the interface and perform actions.
+- **Limit Container Capabilities**: Consider using Docker's security options to drop unnecessary capabilities from the container. For example, you can use the `--cap-drop` option to limit the container’s capabilities. 
+
+#### Basic Authentication
 
 Here is an example to serve the frontend with Caddy and Basic Authentication:
 
@@ -73,9 +89,12 @@ services:
 
   mailserver-aliases:
     image: chscheid/docker-mailserver-aliases:1.0.1
+    read_only: true
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    cap_drop:
+      - ALL
 ```
 
 `Caddyfile`:
@@ -174,6 +193,12 @@ Contributions are welcome! If you'd like to contribute to the project, please fo
 5. Open a pull request.
 
 Please make sure to update tests as appropriate.
+
+## Future Improvements
+
+### Goal: Remove the Dependency on Docker Socket Mounting
+
+One of the goals for future development of this project is to eliminate the need to mount the Docker socket (`/var/run/docker.sock`) into the container. Although mounting the Docker socket is currently required for the REST API to interact with the Docker Mailserver, this practice can pose security risks.
 
 ## License
 
