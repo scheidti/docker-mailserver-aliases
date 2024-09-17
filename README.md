@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/scheidti/docker-mailserver-aliases
 )](https://github.com/scheidti/docker-mailserver-aliases?tab=MIT-1-ov-file)
-[![Go Report Card](https://goreportcard.com/badge/github.com/scheidti/docker-mailserver-aliases)](https://goreportcard.com/report/github.com/github.com/scheidti/docker-mailserver-aliases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/scheidti/docker-mailserver-aliases)](https://goreportcard.com/report/github.com/scheidti/docker-mailserver-aliases)
 
 ## Overview
 
