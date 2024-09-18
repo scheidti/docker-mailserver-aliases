@@ -206,4 +206,4 @@ One of the goals for future development of this project is to eliminate the need
 
 ## License
 
-This project is open-source and available under the [MIT License](LICENSE).
+This project is open-source and available under the [MIT License](https://github.com/scheidti/docker-mailserver-aliases/blob/main/LICENCE).
