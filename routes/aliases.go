@@ -94,12 +94,14 @@ func AliasesPostHandler(c *gin.Context) {
 	}
 
 	emailExists, err := checkIfEmailExists(cli, container.ID, newAlias.Email)
+	_, aliasExistsErr := checkIfAliasExists(cli, container.ID, newAlias.Email)
+
 	if err != nil {
 		c.JSON(500, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
-	if !emailExists {
+	if !emailExists && aliasExistsErr != nil {
 		c.JSON(400, models.ErrorResponse{Error: "Email does not exist"})
 		return
 	}

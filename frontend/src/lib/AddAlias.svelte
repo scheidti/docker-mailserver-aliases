@@ -15,6 +15,7 @@
 	let emailOptions: string[] = [];
 	let inputElement: HTMLInputElement;
 	let isLoading = false;
+	let includeExistingAliases = false;
 	export let aliases: AliasResponse[] = [];
 
 	$: domainOptions = emailOptions.map((email) => email.split("@")[1]);
@@ -25,6 +26,21 @@
 		email.length > 0 &&
 		!checkIfAliasExistsAlready(aliasAndDomain) &&
 		(inputElement?.checkValidity() ?? false);
+
+	$: emailSelectOptions = (() => {
+		const result = [...emailOptions];
+		if (includeExistingAliases) {
+			result.push(...aliases.map((alias) => alias.alias));
+		}
+		result.sort((a, b) => a.localeCompare(b));
+		return result;
+	})();
+
+	$: {
+		if (!emailSelectOptions.includes(email)) {
+			email = "";
+		}
+	}
 
 	async function handleSubmit() {
 		if (!validAlias) {
@@ -54,7 +70,10 @@
 			} else {
 				toasts.update((toasts) => [
 					...toasts,
-					{ type: "error", text: `Failed to add alias: ${response.statusText}` },
+					{
+						type: "error",
+						text: `Failed to add alias: ${response.statusText}`,
+					},
 				]);
 			}
 		} catch (error) {
@@ -137,19 +156,34 @@
 			<p class="text-md text-primary">Redirects to</p>
 		</div>
 
-		<div class="add-row">
-			<label for="email" class="sr-only">Email</label>
-			<select
-				id="email"
-				name="email"
-				class="select select-bordered"
-				bind:value={email}
-			>
-				<option value="">Select email...</option>
-				{#each emailOptions as option}
-					<option value={option}>{option}</option>
-				{/each}
-			</select>
+		<div class="add-row flex items-center">
+			<div>
+				<label for="email" class="sr-only">Email</label>
+				<select
+					id="email"
+					name="email"
+					class="select select-bordered"
+					bind:value={email}
+				>
+					<option value="">Select email...</option>
+					{#each emailSelectOptions as option}
+						<option value={option}>{option}</option>
+					{/each}
+				</select>
+			</div>
+
+			<div>
+				<label class="pl-2 label cursor-pointer">
+					<input
+						id="includeExistingAliases"
+						name="includeExistingAliases"
+						type="checkbox"
+						bind:checked={includeExistingAliases}
+						class="checkbox"
+					/>
+					<span class="pl-2 label-text">Include aliases</span>
+				</label>
+			</div>
 		</div>
 
 		{#if isLoading}
