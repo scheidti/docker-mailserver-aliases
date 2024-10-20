@@ -18,7 +18,15 @@
 	let includeExistingAliases = false;
 	export let aliases: AliasResponse[] = [];
 
-	$: domainOptions = emailOptions.map((email) => email.split("@")[1]);
+	$: domainOptions = (() => {
+		const result = emailOptions.map((email) => email.split("@")[1])
+		const aliasDomains = aliases.map((alias) => alias.alias.split("@")[1]);
+		const aliasEmailDomains = aliases.map((alias) => alias.email.split("@")[1]);
+		result.push(...aliasDomains);
+		result.push(...aliasEmailDomains);
+		return [...new Set(result)].sort((a, b) => a.localeCompare(b));
+	})();
+
 	$: aliasAndDomain = alias + "@" + domain;
 	$: validAlias =
 		alias.length > 0 &&
@@ -39,6 +47,9 @@
 	$: {
 		if (!emailSelectOptions.includes(email)) {
 			email = "";
+		}
+		if (!domainOptions.includes(domain)) {
+			domain = "";
 		}
 	}
 
