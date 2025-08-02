@@ -54,7 +54,7 @@ Add the `mailserver-aliases` container to your `docker-compose.yaml` file:
 ```yaml
 services:
   mailserver-aliases:
-    image: chscheid/docker-mailserver-aliases:1.0.2
+    image: chscheid/docker-mailserver-aliases:1.1.0
     restart: unless-stopped
     read_only: true
     ports:
@@ -103,7 +103,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
 
   mailserver-aliases:
-    image: chscheid/docker-mailserver-aliases:1.0.1
+    image: chscheid/docker-mailserver-aliases:1.1.0
     read_only: true
     restart: unless-stopped
     volumes:
