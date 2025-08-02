@@ -60,7 +60,7 @@ func checkIfContainerIsRunning(c *gin.Context, cli DockerClient) {
 	}
 
 	for _, container := range containers {
-		if strings.Contains(container.Image, models.DockerImage) {
+		if strings.Contains(container.Image, models.GetDockerImage()) {
 			c.JSON(200, models.StatusResponse{Running: true})
 			return
 		}
@@ -78,7 +78,7 @@ func getMailserverContainer(cli DockerClient) (types.Container, error) {
 	}
 
 	for _, container := range containers {
-		if strings.Contains(container.Image, models.DockerImage) {
+		if strings.Contains(container.Image, models.GetDockerImage()) {
 			return container, nil
 		}
 	}

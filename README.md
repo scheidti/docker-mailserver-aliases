@@ -33,11 +33,19 @@ To run the Docker container, you will need:
 
 ### Configuration
 
-You can change the port of the web server with the following environment variable:
+You can configure the application using the following environment variables:
 
 ```bash
+# Change the web server port (default: ":8080")
 export GIN_ADDR=":8080"
+
+# Configure the Docker Mailserver image name (default: "mailserver/docker-mailserver")
+export DOCKER_MAILSERVER_IMAGE="mailserver/docker-mailserver"
 ```
+
+The `DOCKER_MAILSERVER_IMAGE` environment variable allows you to specify a custom Docker Mailserver image name if you're using a different image or tag than the default.
+
+> **Note**: The application uses partial string matching to identify the Docker Mailserver container. This means the configured value doesn't need to exactly match the full image name - it just needs to be contained within it. For example, setting `DOCKER_MAILSERVER_IMAGE=mailserver` would match containers running `mailserver/docker-mailserver:latest`, `ghcr.io/docker-mailserver/docker-mailserver:edge`, etc.
 
 ### Docker Compose
 
@@ -53,6 +61,9 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # Optional: specify custom Docker Mailserver image
+      # - DOCKER_MAILSERVER_IMAGE=mailserver/docker-mailserver
     cap_drop:
       - ALL
 ```
@@ -97,6 +108,9 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # Optional: specify custom Docker Mailserver image
+      # - DOCKER_MAILSERVER_IMAGE=mailserver/docker-mailserver
     cap_drop:
       - ALL
 ```
