@@ -1,6 +1,13 @@
 package models
 
-const DockerImage = "mailserver/docker-mailserver"
+import "os"
+
+func GetDockerImage() string {
+	if image := os.Getenv("DOCKER_MAILSERVER_IMAGE"); image != "" {
+		return image
+	}
+	return "mailserver/docker-mailserver"
+}
 
 type StatusResponse struct {
 	Running bool `json:"running"`

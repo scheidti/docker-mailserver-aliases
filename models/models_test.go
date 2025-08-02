@@ -2,13 +2,22 @@ package models
 
 import (
 	"encoding/json"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDockerImageConstant(t *testing.T) {
-	assert.Equal(t, "mailserver/docker-mailserver", DockerImage, "DockerImage should match the expected value")
+func TestGetDockerImageDefault(t *testing.T) {
+	assert.Equal(t, "mailserver/docker-mailserver", GetDockerImage(), "GetDockerImage should return the default value when no environment variable is set")
+}
+
+func TestGetDockerImageFromEnv(t *testing.T) {
+	customImage := "custom/mailserver:latest"
+	os.Setenv("DOCKER_MAILSERVER_IMAGE", customImage)
+	defer os.Unsetenv("DOCKER_MAILSERVER_IMAGE")
+	
+	assert.Equal(t, customImage, GetDockerImage(), "GetDockerImage should return the environment variable value when set")
 }
 
 func TestStatusResponseMarshalling(t *testing.T) {
