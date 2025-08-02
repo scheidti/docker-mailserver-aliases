@@ -1,6 +1,10 @@
 <script lang="ts">
-	export let message: string = "";
-	export let type: "error" | "success" | "info" | "warning" = "info";
+	interface Props {
+		message?: string;
+		type?: "error" | "success" | "info" | "warning";
+	}
+
+	let { message = "", type = "info" }: Props = $props();
 </script>
 
 <div

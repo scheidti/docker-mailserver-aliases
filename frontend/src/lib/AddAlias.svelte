@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, createEventDispatcher } from "svelte";
+	import { onMount } from "svelte";
 	import { baseUrl } from "../config";
 	import { toasts } from "../stores";
 	import Spinner from "./Spinner.svelte";
@@ -7,53 +7,23 @@
 
 	const aliasesUrl = baseUrl + "/v1/aliases";
 	const emailsUrl = baseUrl + "/v1/emails";
-	const dispatch = createEventDispatcher();
 
-	let alias = "";
-	let domain = "";
-	let email = "";
-	let emailOptions: string[] = [];
-	let inputElement: HTMLInputElement;
-	let isLoading = false;
-	let includeExistingAliases = false;
-	export let aliases: AliasResponse[] = [];
-
-	$: domainOptions = (() => {
-		const result = emailOptions.map((email) => email.split("@")[1])
-		const aliasDomains = aliases.map((alias) => alias.alias.split("@")[1]);
-		const aliasEmailDomains = aliases.map((alias) => alias.email.split("@")[1]);
-		result.push(...aliasDomains);
-		result.push(...aliasEmailDomains);
-		return [...new Set(result)].sort((a, b) => a.localeCompare(b));
-	})();
-
-	$: aliasAndDomain = alias + "@" + domain;
-	$: validAlias =
-		alias.length > 0 &&
-		domain.length > 0 &&
-		email.length > 0 &&
-		!checkIfAliasExistsAlready(aliasAndDomain) &&
-		(inputElement?.checkValidity() ?? false);
-
-	$: emailSelectOptions = (() => {
-		const result = [...emailOptions];
-		if (includeExistingAliases) {
-			result.push(...aliases.map((alias) => alias.alias));
-		}
-		result.sort((a, b) => a.localeCompare(b));
-		return result;
-	})();
-
-	$: {
-		if (!emailSelectOptions.includes(email)) {
-			email = "";
-		}
-		if (!domainOptions.includes(domain)) {
-			domain = "";
-		}
+	let alias = $state("");
+	let domain = $state("");
+	let email = $state("");
+	let emailOptions: string[] = $state([]);
+	let inputElement: HTMLInputElement | undefined = $state();
+	let isLoading = $state(false);
+	let includeExistingAliases = $state(false);
+	interface Props {
+		aliases?: AliasResponse[];
+		added?: (data: { alias: string; email: string }) => void;
 	}
 
-	async function handleSubmit() {
+	let { aliases = [], added }: Props = $props();
+
+	async function handleSubmit(event: Event) {
+		event.preventDefault();
 		if (!validAlias) {
 			return;
 		}
@@ -73,7 +43,7 @@
 				alias = "";
 				email = "";
 				domain = "";
-				dispatch("added", { alias, email });
+				added?.({ alias, email });
 				toasts.update((toasts) => [
 					...toasts,
 					{ type: "success", text: "Alias added" },
@@ -114,10 +84,46 @@
 	onMount(async () => {
 		getEmails();
 	});
+
+	let domainOptions = $derived((() => {
+		const result = emailOptions.map((email) => email.split("@")[1])
+		const aliasDomains = aliases.map((alias) => alias.alias.split("@")[1]);
+		const aliasEmailDomains = aliases.map((alias) => alias.email.split("@")[1]);
+		result.push(...aliasDomains);
+		result.push(...aliasEmailDomains);
+		return [...new Set(result)].sort((a, b) => a.localeCompare(b));
+	})());
+
+	let emailSelectOptions = $derived((() => {
+		const result = [...emailOptions];
+		if (includeExistingAliases) {
+			result.push(...aliases.map((alias) => alias.alias));
+		}
+		result.sort((a, b) => a.localeCompare(b));
+		return result;
+	})());
+
+	$effect(() => {
+		if (!emailSelectOptions.includes(email)) {
+			email = "";
+		}
+		if (!domainOptions.includes(domain)) {
+			domain = "";
+		}
+	});
+
+	let aliasAndDomain = $derived(alias + "@" + domain);
+
+	let validAlias =
+		$derived(alias.length > 0 &&
+		domain.length > 0 &&
+		email.length > 0 &&
+		!checkIfAliasExistsAlready(aliasAndDomain) &&
+		(inputElement?.checkValidity() ?? false));
 </script>
 
 <div class="mx-auto flex justify-center items-center">
-	<form on:submit|preventDefault={handleSubmit}>
+	<form onsubmit={handleSubmit}>
 		<input
 			bind:this={inputElement}
 			bind:value={aliasAndDomain}

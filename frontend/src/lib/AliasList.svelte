@@ -1,16 +1,19 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
 	import { baseUrl } from "../config";
 	import { toasts } from "../stores";
 	import type { AliasResponse } from "../types";
 	import ConfirmModal from "./ConfirmModal.svelte";
 
 	const aliasesUrl = baseUrl + "/v1/aliases";
-	const dispatch = createEventDispatcher();
 
-	export let aliases: AliasResponse[] = [];
-	let isDeleting = false;
-	let showModal = false;
+	interface Props {
+		aliases?: AliasResponse[];
+		refresh?: () => void;
+	}
+
+	let { aliases = [], refresh }: Props = $props();
+	let isDeleting = $state(false);
+	let showModal = $state(false);
 	let aliasToDelete = "";
 
 	function isAliasInList(alias: string) {
@@ -38,7 +41,7 @@
 			);
 
 			if (response.status === 204) {
-				dispatch("refresh");
+				refresh?.();
 				toasts.update((toasts) => [
 					...toasts,
 					{ type: "success", text: "Alias deleted" },
@@ -82,7 +85,7 @@
 						<button
 							class="btn btn-sm btn-error"
 							disabled={isDeleting}
-							on:click={() => confirmDelete(alias)}
+							onclick={() => confirmDelete(alias)}
 						>
 							Delete
 						</button>
@@ -96,7 +99,7 @@
 	bind:open={showModal}
 	title="Delete Alias"
 	description="Are you sure you want to delete this alias?"
-	on:confirm={removeAlias}
+	confirm={removeAlias}
 />
 
 <style></style>

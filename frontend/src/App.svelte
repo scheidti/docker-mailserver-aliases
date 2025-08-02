@@ -15,8 +15,8 @@
 	const statusUrl = baseUrl + "/v1/status";
 	const running = checkIfMailserverIsRunning();
 
-	let isLoading = false;
-	let aliases: AliasResponse[] = [];
+	let isLoading = $state(false);
+	let aliases: AliasResponse[] = $state([]);
 
 	async function checkIfMailserverIsRunning() {
 		try {
@@ -57,13 +57,13 @@
 		<Spinner />
 	{:then isRunning}
 		{#if isRunning}
-			<AddAlias on:added={getAliases} {aliases} />
+			<AddAlias added={getAliases} {aliases} />
 			{#if isLoading}
 				<div class="flex justify-center">
 					<Spinner />
 				</div>
 			{:else}
-				<AliasList on:refresh={getAliases} {aliases} />
+				<AliasList refresh={getAliases} {aliases} />
 			{/if}
 		{:else}
 			<div class="mx-auto max-w-(--breakpoint-xl)">

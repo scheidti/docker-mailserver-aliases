@@ -1,14 +1,16 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { fade } from "svelte/transition";
 	import { toasts } from "../stores";
 
-	$: {
+	run(() => {
 		if ($toasts.length > 0) {
 			setTimeout(() => {
 				toasts.update((toasts) => toasts.slice(1));
 			}, 4000);
 		}
-	}
+	});
 </script>
 
 <div class="toast toast-top toast-right">
@@ -21,7 +23,7 @@
 			<button
 				class="btn btn-sm btn-square btn-outline border-0"
 				aria-label="Close"
-				on:click={() =>
+				onclick={() =>
 					toasts.update((toasts) => toasts.filter((toast) => toast !== toast))}
 			>
 				<svg

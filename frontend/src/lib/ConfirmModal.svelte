@@ -1,31 +1,35 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from "svelte";
+	import { onMount } from "svelte";
 
-	const dispatch = createEventDispatcher();
+	interface Props {
+		title?: string;
+		description?: string;
+		open?: boolean;
+		confirm?: () => void;
+	}
 
-	export let title = "";
-	export let description = "";
-	export let open = false;
-	let modal: HTMLDialogElement;
+	let { title = "", description = "", open = $bindable(false), confirm }: Props = $props();
+	let modal: HTMLDialogElement | undefined = $state();
 
-	$: {
+	$effect(() => {
 		if (open) {
 			modal?.showModal();
 		} else {
 			modal?.close();
 		}
-	}
+	});
 
 	function handleSubmit(event: SubmitEvent) {
+		event.preventDefault();
 		const button = event.submitter as HTMLButtonElement;
 		if (button.textContent === "Confirm") {
-			dispatch("confirm");
+			confirm?.();
 		}
 		open = false;
 	}
 
 	onMount(() => {
-		modal.addEventListener("close", (event) => {
+		modal?.addEventListener("close", (event) => {
 			event.preventDefault();
 			open = false;
 		});
@@ -37,7 +41,7 @@
 		<h3 class="text-lg font-bold">{title}</h3>
 		<p class="py-4">{description}</p>
 		<div class="modal-action">
-			<form method="dialog" on:submit|preventDefault={handleSubmit}>
+			<form method="dialog" onsubmit={handleSubmit}>
 				<button class="btn">Cancel</button>
 				<button class="btn btn-primary">Confirm</button>
 			</form>
