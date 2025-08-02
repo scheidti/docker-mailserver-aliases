@@ -214,6 +214,7 @@
 </div>
 
 <style>
+	@reference "../app.css";
 	.add-row {
 		@apply flex justify-center mb-4;
 	}

@@ -66,7 +66,7 @@
 				<AliasList on:refresh={getAliases} {aliases} />
 			{/if}
 		{:else}
-			<div class="mx-auto max-w-screen-xl">
+			<div class="mx-auto max-w-(--breakpoint-xl)">
 				<Alert message={"Mailserver is not running."} type={"error"} />
 			</div>
 		{/if}
@@ -77,7 +77,7 @@
 <footer>
 	<div class="mx-auto flex justify-center p-8 mt-4">
 		<div class="text-sm">
-			© 2024
+			© 2025
 			<a
 				href="https://github.com/scheidti/docker-mailserver-aliases"
 				target="_blank"

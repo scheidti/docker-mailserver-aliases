@@ -64,7 +64,7 @@
 	}
 </script>
 
-<div class="overflow-x-auto mx-auto max-w-screen-xl">
+<div class="overflow-x-auto mx-auto max-w-(--breakpoint-xl)">
 	<table class="table">
 		<thead>
 			<tr>

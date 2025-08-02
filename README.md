@@ -46,7 +46,7 @@ Add the `mailserver-aliases` container to your `docker-compose.yaml` file:
 ```yaml
 services:
   mailserver-aliases:
-    image: chscheid/docker-mailserver-aliases:1.0.1
+    image: chscheid/docker-mailserver-aliases:1.0.2
     restart: unless-stopped
     read_only: true
     ports:
@@ -124,7 +124,7 @@ The backend REST API is written in Go and provides endpoints to manage aliases. 
 
 #### Prerequisites
 
-- Go (1.23 or higher)
+- Go (1.24 or higher)
 
 #### Run Development Server
 

@@ -20,6 +20,7 @@
 			<span>{toast.text}</span>
 			<button
 				class="btn btn-sm btn-square btn-outline border-0"
+				aria-label="Close"
 				on:click={() =>
 					toasts.update((toasts) => toasts.filter((toast) => toast !== toast))}
 			>
